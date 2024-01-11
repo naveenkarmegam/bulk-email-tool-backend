@@ -49,10 +49,10 @@ const activateAccount = async (req, res, next) => {
     if (!user) {
       return next(setError(404, "User not found"));
     }
-    if (user.isActivated) {
+    if (user.email_verified) {
       return next(setError(400, "Account is already activated"));
     }
-    user.isActivated = true;
+    user.email_verified = true;
     await user.save();
     res.status(200).json({
       message: "Account activated successfully",
@@ -69,7 +69,7 @@ const userLogin = async (req, res, next) => {
     if (!user) {
       return next(setError(401, "Invalid credentials"));
     }
-    if (!user.isActivated) {
+    if (!user.email_verified) {
       return next(
         setError(400, "Please activate your account before logging in.")
       );
@@ -94,22 +94,45 @@ const userLogin = async (req, res, next) => {
 const logInWithGoogle = async (req, res, next) => {
   try {
     const { token } = req.body;
-    console.log(token)
     const decodedToken = await firebaseApp.auth().verifyIdToken(token);
+    console.log(decodedToken);
     if (decodedToken.email) {
-      const user = await User.findOne({ firebaseId: decodedToken.uid });
+      const user = await User.findOne({ email: decodedToken.email });
       if (user) {
         const token = generateToken(user._id);
-        return res.status(200).json({ token, user });
+        const { password: hashPassword1, ...rest } = user._doc;
+        const expiryDate = new Date(Date.now() + 3600000);
+        return res
+          .cookie("access_token", token, {
+            httpOnly: true,
+            expires: expiryDate,
+          })
+          .status(200)
+          .json(rest);
       } else {
-        let newUser = new User({
+        const generatePassword =
+          Math.random().toString(36).slice(-8) +
+          Math.random().toString(36).slice(-8);
+        const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
+
+        const newUser = new User({
           firstName: decodedToken.name,
           email: decodedToken.email,
-          firebaseId: decodedToken.uid,
+          password: hashedPassword,
+          profilePicture: decodedToken.picture,
+          email_verified:decodedToken.email_verified,
         });
         await newUser.save();
         const token = generateToken(newUser._id);
-        return res.status(200).json({ token, newUser });
+        const { password: hashPassword2, ...rest } = newUser._doc;
+        const expiryDate = new Date(Date.now() + 3600000);
+        return res
+          .cookie("access_token", token, {
+            httpOnly: true,
+            expires: expiryDate,
+          })
+          .status(200)
+          .json(rest);
       }
     } else {
       return next(

@@ -6,7 +6,10 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
-    lastName: String,
+    lastName: {
+      type: String,
+      default: "",
+    },
     email: {
       type: String,
       required: true,
@@ -17,13 +20,14 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
-    isActivated: {
+    email_verified: {
       type: Boolean,
       default: false,
     },
-    firebaseId: String,
-    picture: {
+    profilePicture: {
       type: String,
+      default:
+        "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
     },
   },
   {
