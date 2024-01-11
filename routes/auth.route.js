@@ -4,16 +4,26 @@ const express = require("express");
 const joiValidation = require("../config/joiValidaiton.js");
 const {
   registerValidationSchema,
+  loginValidationSchema,
 } = require("../middlewares/userValidationSchema.js");
 
 //controller
-const { userRegistration, logInWithGoogle, activateAccount } = require("../controllers/auth.controller.js");
+const {
+  userRegistration,
+  logInWithGoogle,
+  activateAccount,
+  userLogin,
+} = require("../controllers/auth.controller.js");
 
 const router = express.Router();
 
+router.post(
+  "/register",
+  joiValidation(registerValidationSchema),
+  userRegistration
+);
+router.get("/activate-account/:token", activateAccount);
+router.post("/login", joiValidation(loginValidationSchema), userLogin);
 router.post("/login-with-google", logInWithGoogle);
-  
-router.post("/register", joiValidation(registerValidationSchema),userRegistration);
-router.get('/activate-account/:token',activateAccount)
 
 module.exports = router;

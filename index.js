@@ -13,7 +13,7 @@ const connectDatabase = require("./database/database");
 const errorHandler = require("./middlewares/errorHandler");
 
 //routers
-const userRoute = require("./routes/auth.route.js");
+const authRoute = require("./routes/auth.route.js");
 const app = express();
 const port = 3005;
 const DB_URI = process.env.DB_URI;
@@ -34,16 +34,15 @@ app.use(
 );
 
 //server checking
-app.get("/", function (req, res) {
+app.get("/api", function (req, res) {
   res.send("hello, world!");
 });
 
 //routing
-app.use("/user", userRoute);
+app.use("/api/auth", authRoute);
 
 //error handler
 app.use(errorHandler);
-
 
 const database = connectDatabase(DB_URI);
 

@@ -5,4 +5,4 @@ const setError = (statusCode, message) => {
   return error;
 };
 
-module.exports = setError
+module.exports = setError;

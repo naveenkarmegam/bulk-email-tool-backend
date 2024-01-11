@@ -6,9 +6,9 @@ const sendServerMail = async (email, content) => {
       from: "abc@email.com",
       to: email,
       subject: "Activation Link",
-      text:content,
+      text: content,
     });
-    console.log("Activation email sent successfully.");
+    console.log("Email sent successfully.");
   } catch (error) {
     console.error("Error sending activation email:", error);
     throw new Error("Error sending activation email");
