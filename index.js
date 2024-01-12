@@ -2,21 +2,25 @@ const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-const bodyParse = require("body-parser");
+const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
 const fs = require("fs");
 const path = require("path");
 
-//database
-const connectDatabase = require("./database/database");
-
-//middleware
-const errorHandler = require("./middlewares/errorHandler");
-
-//routers
-const authRoute = require("./routes/auth.route.js");
 const app = express();
 const port = 3005;
 const DB_URI = process.env.DB_URI;
+
+
+//database
+const connectDatabase = require("./database/database.js");
+
+//middleware
+const errorHandler = require("./middlewares/errorHandler.js");
+
+//routers
+const authRoute = require("./routes/auth.route.js");
+const userRoute = require('./routes/user.route.js');
 
 //logs
 const accessLogStream = fs.createWriteStream(
@@ -26,7 +30,8 @@ const accessLogStream = fs.createWriteStream(
 //middlewares
 app.use(morgan("combined", { stream: accessLogStream }));
 app.use(morgan("tiny"));
-app.use(bodyParse.json());
+app.use(bodyParser.json());
+app.use(cookieParser())
 app.use(
   cors({
     origin: "*",
@@ -40,6 +45,7 @@ app.get("/api", function (req, res) {
 
 //routing
 app.use("/api/auth", authRoute);
+app.use("/api/user",userRoute)
 
 //error handler
 app.use(errorHandler);
