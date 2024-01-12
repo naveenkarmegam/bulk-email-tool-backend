@@ -13,6 +13,7 @@ const {
   logInWithGoogle,
   activateAccount,
   userLogin,
+  userLogout,
 } = require("../controllers/auth.controller.js");
 
 const router = express.Router();
@@ -25,5 +26,6 @@ router.post(
 router.get("/activate-account/:token", activateAccount);
 router.post("/login", joiValidation(loginValidationSchema), userLogin);
 router.post("/login-with-google", logInWithGoogle);
+router.get('/logout',userLogout)
 
 module.exports = router;

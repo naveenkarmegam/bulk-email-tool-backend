@@ -144,9 +144,19 @@ const logInWithGoogle = async (req, res, next) => {
   }
 };
 
+const userLogout = async(req,res,next)=>{
+  try {
+    res.clearCookie('access_token').status(200).json({
+      message : 'Your Account Logout successfully'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 module.exports = {
   userRegistration,
   logInWithGoogle,
   activateAccount,
   userLogin,
+  userLogout,
 };
