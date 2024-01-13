@@ -25,10 +25,11 @@ const userRegistration = async (req, res, next) => {
     const savedUser = await user.save();
     const token = generateToken(savedUser._id);
 
+    const subject = "Activation Link";
     const activateUrl = `http://localhost:3005/api/auth/activate-account/${token}`;
     const emailBody = `Click the following link to activate your account:\n${activateUrl}`;
 
-    await sendServerMail(req.body.email, emailBody);
+    await sendServerMail(req.body.email, subject, emailBody);
 
     res.status(201).json({
       message:
@@ -80,7 +81,7 @@ const userLogin = async (req, res, next) => {
     }
     const token = generateToken(user._id);
     const { password: hashPassword, ...rest } = user._doc;
-    // await User.findOneAndUpdate({ email }, { token });
+
     const expiryDate = new Date(Date.now() + 3600000); // 1hour, added in the cookie obj
     res
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
@@ -120,7 +121,7 @@ const logInWithGoogle = async (req, res, next) => {
           email: decodedToken.email,
           password: hashedPassword,
           profilePicture: decodedToken.picture,
-          email_verified:decodedToken.email_verified,
+          email_verified: decodedToken.email_verified,
         });
         await newUser.save();
         const token = generateToken(newUser._id);
@@ -144,15 +145,15 @@ const logInWithGoogle = async (req, res, next) => {
   }
 };
 
-const userLogout = async(req,res,next)=>{
+const userLogout = async (req, res, next) => {
   try {
-    res.clearCookie('access_token').status(200).json({
-      message : 'Your Account Logout successfully'
-    })
+    res.clearCookie("access_token").status(200).json({
+      message: "Your Account Logout successfully",
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 module.exports = {
   userRegistration,
   logInWithGoogle,

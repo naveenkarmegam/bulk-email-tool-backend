@@ -21,6 +21,8 @@ const errorHandler = require("./middlewares/errorHandler.js");
 //routers
 const authRoute = require("./routes/auth.route.js");
 const userRoute = require('./routes/user.route.js');
+const mailRoute = require('./routes/mail.route.js')
+const recipientRoute = require('./routes/recipient.route.js')
 
 //logs
 const accessLogStream = fs.createWriteStream(
@@ -45,7 +47,9 @@ app.get("/api", function (req, res) {
 
 //routing
 app.use("/api/auth", authRoute);
-app.use("/api/user",userRoute)
+app.use("/api/user",userRoute);
+app.use("/api/mail",mailRoute);
+app.use("/api/recipient",recipientRoute);
 
 //error handler
 app.use(errorHandler);

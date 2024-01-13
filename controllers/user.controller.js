@@ -11,7 +11,6 @@ const updateUserProfile = async (req, res, next) => {
     if (req.params.id !== req.user._id) {
       return next(setError(401, "You can update only your account!"));
     }
-
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,
       {

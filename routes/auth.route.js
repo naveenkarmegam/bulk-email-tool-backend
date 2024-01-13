@@ -1,11 +1,11 @@
 const express = require("express");
 
 //middlewares
-const joiValidation = require("../config/joiValidaiton.js");
+const joiValidation = require("../middlewares/joiValidation.js");
 const {
   registerValidationSchema,
   loginValidationSchema,
-} = require("../middlewares/userValidationSchema.js");
+} = require("../validations/userValidationSchema.js");
 
 //controller
 const {
