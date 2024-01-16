@@ -3,7 +3,7 @@ const transporter = require("../config/nodemailer.js");
 const sendServerMail = async (email,subject, content) => {
   try {
     await transporter.sendMail({
-      from: "abc@email.com",
+      from: 'noreply@iamnk.pro',
       to: email,
       subject,
       text: content,

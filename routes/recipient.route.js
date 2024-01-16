@@ -2,7 +2,7 @@ const express = require('express');
 const { verifyTokenAuthentication } = require('../middlewares/authentication.js');
 const joiValidation = require('../middlewares/joiValidation.js');
 const { recipientsValidationSchema } = require('../validations/recipientValidationSchema.js');
-const { addRecipient, updateRecipient, deleteRecipient, allRecipient } = require('../controllers/recipients.controller.js');
+const { addRecipient, updateRecipient, deleteRecipient, allRecipient, getRecipientById } = require('../controllers/recipients.controller.js');
 
 const router = express.Router()
 
@@ -11,6 +11,7 @@ router.post('/add-recipient',verifyTokenAuthentication,joiValidation(recipientsV
 router.patch('/update-recipient/:recipientId',verifyTokenAuthentication,updateRecipient)
 router.delete('/delete-recipient/:recipientId',verifyTokenAuthentication,deleteRecipient)
 router.get('/all-recipients',verifyTokenAuthentication,allRecipient)
+router.get('/get-recipient/:id',verifyTokenAuthentication,getRecipientById)
 
 
 module.exports = router

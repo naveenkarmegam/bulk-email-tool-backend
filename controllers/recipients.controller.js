@@ -19,7 +19,7 @@ const addRecipient = async (req, res, next) => {
     });
 
     await recipient.save();
-    res.status(201).json(recipient);
+    res.status(201).json({ message: "Recipient added successfully",recipient});
   } catch (error) {
     next(error);
   }
@@ -88,9 +88,9 @@ const deleteRecipient = async (req, res, next) => {
       return next(setError(404, "Recipient not found"));
     }
 
-    await Recipient.deleteOne({ _id: recipientId });
+    const deletedRecipient = await Recipient.findByIdAndDelete(recipientId);
 
-    res.status(200).json({ message: "Recipient deleted successfully" });
+    res.status(200).json({ message: "Recipient deleted successfully",deletedRecipient});
   } catch (error) {
     next(error);
   }
@@ -104,10 +104,22 @@ const allRecipient = async (req, res, next) => {
     next(error);
   }
 };
+const getRecipientById = async (req, res, next) => {
+  try {
+    const recipients = await Recipient.findById(req.params.id);
+    if(!recipients){
+      return next(setError(404,"Recipient not found"))
+    }
+    res.status(200).json(recipients);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   addRecipient,
   updateRecipient,
   deleteRecipient,
   allRecipient,
+  getRecipientById
 };

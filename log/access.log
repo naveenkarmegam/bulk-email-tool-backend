@@ -1,5 +1,0 @@
-::1 - - [13/Jan/2024:19:11:10 +0000] "GET /api/recipient/all-recipients HTTP/1.1" 200 463 "-" "PostmanRuntime/7.36.1"
-::1 - - [13/Jan/2024:19:11:44 +0000] "DELETE /api/user/deleteUser/65a11ba8222259180f8a0622 HTTP/1.1" 401 80 "-" "PostmanRuntime/7.36.1"
-::1 - - [13/Jan/2024:19:11:54 +0000] "POST /api/recipient/add-recipient HTTP/1.1" 401 64 "http://localhost:5173/add-recipients" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-::1 - - [13/Jan/2024:19:13:44 +0000] "DELETE /api/recipient/delete-recipient/65a2c515d84e01e61b928c64 HTTP/1.1" 404 66 "-" "PostmanRuntime/7.36.1"
-::1 - - [13/Jan/2024:19:14:12 +0000] "DELETE /api/recipient/delete-recipient/65a2d9b8edf92e563d9c09f1 HTTP/1.1" 200 44 "-" "PostmanRuntime/7.36.1"
