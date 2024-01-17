@@ -36,7 +36,6 @@ const userRegistration = async (req, res, next) => {
         "Registration is successful. The activation link has been sent to your email.",
     });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
@@ -96,7 +95,6 @@ const logInWithGoogle = async (req, res, next) => {
   try {
     const { token } = req.body;
     const decodedToken = await firebaseApp.auth().verifyIdToken(token);
-    console.log(decodedToken);
     if (decodedToken.email) {
       const user = await User.findOne({ email: decodedToken.email });
       if (user) {

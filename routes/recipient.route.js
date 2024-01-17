@@ -1,17 +1,38 @@
-const express = require('express');
-const { verifyTokenAuthentication } = require('../middlewares/authentication.js');
-const joiValidation = require('../middlewares/joiValidation.js');
-const { recipientsValidationSchema } = require('../validations/recipientValidationSchema.js');
-const { addRecipient, updateRecipient, deleteRecipient, allRecipient, getRecipientById } = require('../controllers/recipients.controller.js');
+const express = require("express");
+const {
+  verifyTokenAuthentication,
+} = require("../middlewares/authentication.js");
+const joiValidation = require("../middlewares/joiValidation.js");
+const {
+  recipientsValidationSchema,
+} = require("../validations/recipientValidationSchema.js");
+const {
+  addRecipient,
+  updateRecipient,
+  deleteRecipient,
+  getRecipientByUser,
+  getRecipientById,
+} = require("../controllers/recipients.controller.js");
 
-const router = express.Router()
+const router = express.Router();
 
+router.post(
+  "/add-recipient",
+  verifyTokenAuthentication,
+  joiValidation(recipientsValidationSchema),
+  addRecipient
+);
+router.patch(
+  "/update-recipient/:recipientId",
+  verifyTokenAuthentication,
+  updateRecipient
+);
+router.delete(
+  "/delete-recipient/:recipientId",
+  verifyTokenAuthentication,
+  deleteRecipient
+);
+router.get("/get-recipients-by-user", verifyTokenAuthentication, getRecipientByUser);
+router.get("/get-recipient/:id", verifyTokenAuthentication, getRecipientById);
 
-router.post('/add-recipient',verifyTokenAuthentication,joiValidation(recipientsValidationSchema),addRecipient)
-router.patch('/update-recipient/:recipientId',verifyTokenAuthentication,updateRecipient)
-router.delete('/delete-recipient/:recipientId',verifyTokenAuthentication,deleteRecipient)
-router.get('/all-recipients',verifyTokenAuthentication,allRecipient)
-router.get('/get-recipient/:id',verifyTokenAuthentication,getRecipientById)
-
-
-module.exports = router
+module.exports = router;

@@ -96,7 +96,7 @@ const deleteRecipient = async (req, res, next) => {
   }
 };
 
-const allRecipient = async (req, res, next) => {
+const getRecipientByUser = async (req, res, next) => {
   try {
     const recipients = await Recipient.find({ userId: req.user._id });
     res.status(200).json(recipients);
@@ -120,6 +120,6 @@ module.exports = {
   addRecipient,
   updateRecipient,
   deleteRecipient,
-  allRecipient,
+  getRecipientByUser,
   getRecipientById
 };

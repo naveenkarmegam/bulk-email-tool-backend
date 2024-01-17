@@ -6,7 +6,7 @@ const sendServerMail = async (email,subject, content) => {
       from: 'noreply@iamnk.pro',
       to: email,
       subject,
-      text: content,
+      html: content,
     });
     console.log("Email sent successfully.");
   } catch (error) {

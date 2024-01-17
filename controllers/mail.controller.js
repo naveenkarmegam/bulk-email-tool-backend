@@ -15,7 +15,6 @@ try {
       res.status(200).json({ message: 'Bulk email sent successfully' });
     
 } catch (error) {
-    console.error( error);
     next(error);
 }
 }
