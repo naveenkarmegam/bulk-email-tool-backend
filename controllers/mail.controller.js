@@ -12,7 +12,7 @@ try {
           content,
         });
         await newMail.save();
-      res.status(200).json({ message: 'Bulk email sent successfully' });
+      res.status(200).json({ message: 'Your mail sent successfully' });
     
 } catch (error) {
     next(error);

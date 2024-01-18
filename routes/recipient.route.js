@@ -32,7 +32,11 @@ router.delete(
   verifyTokenAuthentication,
   deleteRecipient
 );
-router.get("/get-recipients-by-user", verifyTokenAuthentication, getRecipientByUser);
+router.get(
+  "/get-recipients-by-user",
+  verifyTokenAuthentication,
+  getRecipientByUser
+);
 router.get("/get-recipient/:id", verifyTokenAuthentication, getRecipientById);
 
 module.exports = router;
