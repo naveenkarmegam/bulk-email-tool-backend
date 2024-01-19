@@ -1,4 +1,5 @@
 const setError = require("../helpers/customError.js");
+const getDashboardInfo = require("../helpers/getDashboard.js");
 const validateMongoDbId = require("../helpers/validateId.js");
 const User = require("../model/user.model.js");
 
@@ -47,4 +48,14 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { updateUserProfile, deleteUser };
+const userDashBoardInfo = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const dashBoardInfo = await getDashboardInfo(_id);
+    res.status(200).json(dashBoardInfo);
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+};
+module.exports = { updateUserProfile, deleteUser, userDashBoardInfo };

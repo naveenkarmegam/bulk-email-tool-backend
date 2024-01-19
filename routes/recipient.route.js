@@ -37,6 +37,6 @@ router.get(
   verifyTokenAuthentication,
   getRecipientByUser
 );
-router.get("/get-recipient/:id", verifyTokenAuthentication, getRecipientById);
+router.get("/get-recipient/:recipientId", verifyTokenAuthentication, getRecipientById);
 
 module.exports = router;

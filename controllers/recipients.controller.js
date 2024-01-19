@@ -19,7 +19,9 @@ const addRecipient = async (req, res, next) => {
     });
 
     await recipient.save();
-    res.status(201).json({ message: "Recipient added successfully",recipient});
+    res
+      .status(201)
+      .json({ message: "Recipient added successfully", recipient });
   } catch (error) {
     next(error);
   }
@@ -90,7 +92,9 @@ const deleteRecipient = async (req, res, next) => {
 
     const deletedRecipient = await Recipient.findByIdAndDelete(recipientId);
 
-    res.status(200).json({ message: "Recipient deleted successfully",deletedRecipient});
+    res
+      .status(200)
+      .json({ message: "Recipient deleted successfully", deletedRecipient });
   } catch (error) {
     next(error);
   }
@@ -106,9 +110,14 @@ const getRecipientByUser = async (req, res, next) => {
 };
 const getRecipientById = async (req, res, next) => {
   try {
-    const recipients = await Recipient.findById(req.params.id);
-    if(!recipients){
-      return next(setError(404,"Recipient not found"))
+    const { recipientId } = req.params;
+    const validateId = validateMongoDbId(recipientId);
+    if (!validateId) {
+      return next(setError(400, "Invalid Recipient Id"));
+    }
+    const recipients = await Recipient.findById(recipientId);
+    if (!recipients) {
+      return next(setError(404, "Recipient not found"));
     }
     res.status(200).json(recipients);
   } catch (error) {
@@ -121,5 +130,5 @@ module.exports = {
   updateRecipient,
   deleteRecipient,
   getRecipientByUser,
-  getRecipientById
+  getRecipientById,
 };
