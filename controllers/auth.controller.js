@@ -29,7 +29,14 @@ const userRegistration = async (req, res, next) => {
     const activateUrl = `https://bulk-email-tool-681r.onrender.com/api/auth/activate-account/${token}`;
     const emailBody = `Click the following link to activate your account:\n${activateUrl}`;
 
-    await sendServerMail(req.body.email, subject, emailBody);
+    try {
+      // Attempt to send the activation email
+      await sendServerMail(req.body.email, subject, emailBody);
+    } catch (error) {
+      // If email sending fails, delete the user record and handle the error
+      await User.findByIdAndDelete(savedUser._id);
+      return next(error);
+    }
 
     res.status(201).json({
       message:
@@ -55,9 +62,7 @@ const activateAccount = async (req, res, next) => {
     }
     user.email_verified = true;
     await user.save();
-    res.status(200).json({
-      message: "Account activated successfully",
-    });
+    res.redirect("https://naveen-bulk-mail-tool-fsd.netlify.app/login");
   } catch (error) {
     console.error(error);
     next(error);
@@ -108,13 +113,15 @@ const logInWithGoogle = async (req, res, next) => {
         await user.save();
         const { password: hashPassword1, ...rest } = user._doc;
         const expiryDate = new Date(Date.now() + 3600000);
-        return res
-          // .cookie("access_token", token, {
-          //   httpOnly: true,
-          //   expires: expiryDate,
-          // })
-          .status(200)
-          .json(rest);
+        return (
+          res
+            // .cookie("access_token", token, {
+            //   httpOnly: true,
+            //   expires: expiryDate,
+            // })
+            .status(200)
+            .json(rest)
+        );
       } else {
         const generatePassword =
           Math.random().toString(36).slice(-8) +
@@ -134,13 +141,15 @@ const logInWithGoogle = async (req, res, next) => {
         await user.save();
         const { password: hashPassword2, ...rest } = newUser._doc;
         const expiryDate = new Date(Date.now() + 3600000);
-        return res
-          // .cookie("access_token", token, {
-          //   httpOnly: true,
-          //   expires: expiryDate,
-          // })
-          .status(200)
-          .json(rest);
+        return (
+          res
+            // .cookie("access_token", token, {
+            //   httpOnly: true,
+            //   expires: expiryDate,
+            // })
+            .status(200)
+            .json(rest)
+        );
       }
     } else {
       return next(
