@@ -26,7 +26,7 @@ const userRegistration = async (req, res, next) => {
     const token = generateToken(savedUser._id);
 
     const subject = "Activation Link";
-    const activateUrl = `http://localhost:3005/api/auth/activate-account/${token}`;
+    const activateUrl = `https://bulk-email-tool-681r.onrender.com/api/auth/activate-account/${token}`;
     const emailBody = `Click the following link to activate your account:\n${activateUrl}`;
 
     await sendServerMail(req.body.email, subject, emailBody);
@@ -176,7 +176,7 @@ const forgotPassword = async (req, res, next) => {
     // user.resetPasswordToken = resetToken;
     // await user.save();
 
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetUrl = `https://naveen-bulk-mail-tool-fsd.netlify.app/reset-password/${resetToken}`;
     const content = `Click the following link to reset your password: ${resetUrl}`;
     await sendServerMail(email, "Reset Password Link", content);
 

@@ -41,7 +41,7 @@ app.use(
 );
 
 //server checking
-app.get("/api", function (req, res) {
+app.get("/", function (req, res) {
   res.send("hello, world!");
 });
 
