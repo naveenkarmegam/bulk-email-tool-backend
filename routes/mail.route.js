@@ -7,6 +7,7 @@ const joiValidation = require("../middlewares/joiValidation.js");
 const {
   sendBulkMailSchema,
 } = require("../validations/mailValidationSchema.js");
+const { sendContactMail } = require("../controllers/contact.controller.js");
 
 const router = express.Router();
 
@@ -15,6 +16,10 @@ router.post(
   verifyTokenAuthentication,
   joiValidation(sendBulkMailSchema),
   sendBulkMail
+);
+router.post(
+  "/sendContactMail",
+  sendContactMail
 );
 
 router.delete('/deleteInboxMail/:mailId',verifyTokenAuthentication,deleteInboxMail)
