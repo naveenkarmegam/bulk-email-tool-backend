@@ -14,6 +14,8 @@ const {
   activateAccount,
   userLogin,
   userLogout,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/auth.controller.js");
 
 const router = express.Router();
@@ -27,5 +29,7 @@ router.get("/activate-account/:token", activateAccount);
 router.post("/login", joiValidation(loginValidationSchema), userLogin);
 router.post("/login-with-google", logInWithGoogle);
 router.get("/logout", userLogout);
+router.post('/forgot-password',forgotPassword)
+router.post('/reset-password/:token',resetPassword)
 
 module.exports = router;

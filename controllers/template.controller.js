@@ -17,6 +17,7 @@ const addTemplate = async (req, res, next) => {
       template,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -51,6 +52,7 @@ const updateTemplate = async (req, res, next) => {
       updatedTemplate,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -71,6 +73,7 @@ const deleteTemplate = async (req, res, next) => {
       .status(200)
       .json({ message: "Template deleted successfully", deletedTemplate });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -83,6 +86,7 @@ const getTemplateByUserId = async (req, res, next) => {
     }
     res.status(200).json(findUserTemplate);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -99,6 +103,7 @@ const getTemplateById = async(req,res,next)=>{
         }
         res.status(200).json(findTemplate)
     } catch (error) {
+      console.error(error);
         next(error)
     }
 }

@@ -28,6 +28,7 @@ const updateUserProfile = async (req, res, next) => {
     const { password, ...rest } = updateUser._doc;
     res.status(200).json(rest);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -44,6 +45,7 @@ const deleteUser = async (req, res, next) => {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     res.status(200).json("user has been deleted successfully");
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -54,6 +56,7 @@ const userDashBoardInfo = async (req, res, next) => {
     const dashBoardInfo = await getDashboardInfo(_id);
     res.status(200).json(dashBoardInfo);
   } catch (error) {
+    console.error(error);
     console.log(error)
     next(error);
   }

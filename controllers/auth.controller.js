@@ -36,6 +36,7 @@ const userRegistration = async (req, res, next) => {
         "Registration is successful. The activation link has been sent to your email.",
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -58,6 +59,7 @@ const activateAccount = async (req, res, next) => {
       message: "Account activated successfully",
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -79,14 +81,17 @@ const userLogin = async (req, res, next) => {
       return next(setError(401, "Invalid credentials"));
     }
     const token = generateToken(user._id);
+    user.token = token;
+    await user.save();
     const { password: hashPassword, ...rest } = user._doc;
 
-    const expiryDate = new Date(Date.now() + 3600000); // 1hour, added in the cookie obj
+    // const expiryDate = new Date(Date.now() + 3600000); // 1hour, added in the cookie obj
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      // .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
       .json(rest);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -99,13 +104,15 @@ const logInWithGoogle = async (req, res, next) => {
       const user = await User.findOne({ email: decodedToken.email });
       if (user) {
         const token = generateToken(user._id);
+        user.token = token;
+        await user.save();
         const { password: hashPassword1, ...rest } = user._doc;
         const expiryDate = new Date(Date.now() + 3600000);
         return res
-          .cookie("access_token", token, {
-            httpOnly: true,
-            expires: expiryDate,
-          })
+          // .cookie("access_token", token, {
+          //   httpOnly: true,
+          //   expires: expiryDate,
+          // })
           .status(200)
           .json(rest);
       } else {
@@ -123,13 +130,15 @@ const logInWithGoogle = async (req, res, next) => {
         });
         await newUser.save();
         const token = generateToken(newUser._id);
+        user.token = token;
+        await user.save();
         const { password: hashPassword2, ...rest } = newUser._doc;
         const expiryDate = new Date(Date.now() + 3600000);
         return res
-          .cookie("access_token", token, {
-            httpOnly: true,
-            expires: expiryDate,
-          })
+          // .cookie("access_token", token, {
+          //   httpOnly: true,
+          //   expires: expiryDate,
+          // })
           .status(200)
           .json(rest);
       }
@@ -139,6 +148,7 @@ const logInWithGoogle = async (req, res, next) => {
       );
     }
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -149,14 +159,64 @@ const userLogout = async (req, res, next) => {
       message: "Your Account Logout successfully",
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(setError(404, "User not found"));
+    }
+
+    const resetToken = generateToken(user._id);
+    // user.resetPasswordToken = resetToken;
+    // await user.save();
+
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const content = `Click the following link to reset your password: ${resetUrl}`;
+    await sendServerMail(email, "Reset Password Link", content);
+
+    res.status(200).json({
+      message: "Reset password link has been sent to your email.",
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+const resetPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    const decodedToken = await verifyToken(token);
+
+    const user = await User.findById(decodedToken._id);
+    if (!user) {
+      return next(setError(400, "Invalid Token"));
+    }
+    const salt = await bcryptjs.genSalt(10);
+    user.password = await bcryptjs.hash(password, salt);
+    // user.resetPasswordToken = undefined;
+    // await user.save();
+    res.status(200).json({
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 module.exports = {
   userRegistration,
   logInWithGoogle,
   activateAccount,
   userLogin,
   userLogout,
+  forgotPassword,
+  resetPassword,
 };
-

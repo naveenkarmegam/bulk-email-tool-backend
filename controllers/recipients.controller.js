@@ -23,6 +23,7 @@ const addRecipient = async (req, res, next) => {
       .status(201)
       .json({ message: "Recipient added successfully", recipient });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -73,6 +74,7 @@ const updateRecipient = async (req, res, next) => {
       .status(200)
       .json({ message: "Recipient updated successfully", updatedRecipient });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -96,6 +98,7 @@ const deleteRecipient = async (req, res, next) => {
       .status(200)
       .json({ message: "Recipient deleted successfully", deletedRecipient });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -105,6 +108,7 @@ const getRecipientByUser = async (req, res, next) => {
     const recipients = await Recipient.find({ userId: req.user._id });
     res.status(200).json(recipients);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -121,6 +125,7 @@ const getRecipientById = async (req, res, next) => {
     }
     res.status(200).json(recipients);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

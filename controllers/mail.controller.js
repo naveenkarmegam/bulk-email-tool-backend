@@ -16,6 +16,7 @@ const sendBulkMail = async (req, res, next) => {
     await newMail.save();
     res.status(200).json({ message: "Your mail sent successfully" });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -38,6 +39,7 @@ const deleteInboxMail = async (req, res, next) => {
 
     res.status(200).json({ message: "Mail deleted successfully", deletedMail });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -47,6 +49,7 @@ const getMailsByUser = async (req, res, next) => {
     const mails = await Mail.find({ userId: req.user._id });
     res.status(200).json(mails);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -64,6 +67,7 @@ const getMailById = async (req, res, next) => {
     }
     res.status(200).json(mail);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
