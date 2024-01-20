@@ -13,7 +13,6 @@ const RecipientSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -25,6 +24,6 @@ const RecipientSchema = new Schema(
     timestamps: true,
   }
 );
-RecipientSchema.index({ email: 1, userId: 1 }, { unique: true });
+
 
 module.exports = model("Recipient", RecipientSchema);

@@ -5,7 +5,10 @@ const Recipient = require("../model/recipient.model.js");
 const addRecipient = async (req, res, next) => {
   try {
     const { firstName, lastName, email } = req.body;
-    const existingEmail = await Recipient.findOne({ email });
+    const existingEmail = await Recipient.findOne({
+      email,
+      userId: req.user._id,
+    });
     if (existingEmail) {
       return next(
         setError(400, "The recipients is already exits for this user")
