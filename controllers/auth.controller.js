@@ -12,6 +12,7 @@ const { firebaseApp } = require("../security/firebase.js");
 const verifyToken = require("../helpers/verifyToken.js");
 const setError = require("../helpers/customError.js");
 const { sendServerMail } = require("../helpers/sendMail.js");
+const activationTemplate = require("../utilities/activationTemplate.js");
 
 const userRegistration = async (req, res, next) => {
   try {
@@ -25,13 +26,13 @@ const userRegistration = async (req, res, next) => {
     const savedUser = await user.save();
     const token = generateToken(savedUser._id);
 
-    const subject = "Activation Link";
-    const activateUrl = `https://bulk-email-tool-681r.onrender.com/api/auth/activate-account/${token}`;
-    const emailBody = `Click the following link to activate your account:\n${activateUrl}`;
+    const subject = "BULK MAILER ACCOUNT ACTIVATION";
+    // const activateUrl = `https://bulk-email-tool-681r.onrender.com/api/auth/activate-account/${token}`;
+    // const emailBody = `Click the following link to activate your account:\n${activateUrl}`;
 
     try {
       // Attempt to send the activation email
-      await sendServerMail(req.body.email, subject, emailBody);
+      await sendServerMail(req.body.email, subject, activationTemplate(token));
     } catch (error) {
       // If email sending fails, delete the user record and handle the error
       await User.findByIdAndDelete(savedUser._id);
@@ -112,16 +113,7 @@ const logInWithGoogle = async (req, res, next) => {
         user.token = token;
         await user.save();
         const { password: hashPassword1, ...rest } = user._doc;
-        const expiryDate = new Date(Date.now() + 3600000);
-        return (
-          res
-            // .cookie("access_token", token, {
-            //   httpOnly: true,
-            //   expires: expiryDate,
-            // })
-            .status(200)
-            .json(rest)
-        );
+        return res.status(200).json(rest);
       } else {
         const generatePassword =
           Math.random().toString(36).slice(-8) +
@@ -140,16 +132,7 @@ const logInWithGoogle = async (req, res, next) => {
         user.token = token;
         await user.save();
         const { password: hashPassword2, ...rest } = newUser._doc;
-        const expiryDate = new Date(Date.now() + 3600000);
-        return (
-          res
-            // .cookie("access_token", token, {
-            //   httpOnly: true,
-            //   expires: expiryDate,
-            // })
-            .status(200)
-            .json(rest)
-        );
+        return res.status(200).json(rest);
       }
     } else {
       return next(

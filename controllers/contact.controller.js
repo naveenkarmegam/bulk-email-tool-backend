@@ -1,5 +1,6 @@
 const Contact = require("../model/contact.model.js");
 const { sendServerMail } = require("../helpers/sendMail.js");
+const { subscribeTemplate } = require("../utilities/subscribeTemplate.js");
 
 const sendContactMail = async (req, res, next) => {
   try {
@@ -19,4 +20,15 @@ const sendContactMail = async (req, res, next) => {
   }
 };
 
-module.exports = { sendContactMail };
+const subscription = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const subject = "HAPPY TO SUBSCRIBE BULK MAILER";
+    await sendServerMail(email, subject, subscribeTemplate());
+    res.status(200).json({ message: "Thank you for subscribe!!" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+module.exports = { sendContactMail, subscription };
