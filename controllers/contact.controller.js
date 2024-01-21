@@ -1,11 +1,12 @@
 const Contact = require("../model/contact.model.js");
 const { sendServerMail } = require("../helpers/sendMail.js");
 const { subscribeTemplate } = require("../utilities/subscribeTemplate.js");
+const { contactTemplate } = require("../utilities/contactTemplate.js");
 
 const sendContactMail = async (req, res, next) => {
   try {
     const { recipients, subject, content, name } = req.body;
-    await sendServerMail(recipients, subject, content);
+    await sendServerMail(recipients,subject,contactTemplate(name));
     const newMail = new Contact({
       recipients,
       name,
